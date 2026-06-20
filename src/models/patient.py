@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Any
 
 
 class PatientResource(BaseModel):
-    resourceType: str = Field(default="Patient", const=True)
+    resourceType: Literal["Patient"] = "Patient"
     id: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     identifier: Optional[List[Dict[str, Any]]] = None
@@ -36,7 +36,7 @@ class BundleEntry(BaseModel):
 
 
 class PatientBundle(BaseModel):
-    resourceType: str = Field(default="Bundle", const=True)
+    resourceType: Literal["Bundle"] = "Bundle"
     type: str = "searchset"
     total: int = 0
     entry: List[BundleEntry] = []
