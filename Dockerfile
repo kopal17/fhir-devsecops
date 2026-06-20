@@ -9,8 +9,8 @@
 # ─────────────────────────────────────────────────────
 
 # Stage 1: Build dependencies
-FROM python:3.11-slim AS builder
-
+# FROM python:3.11-slim AS builder
+FROM python:3.11-alpine AS builder
 WORKDIR /build
 
 # Copy only requirements first (layer cache optimisation)
@@ -21,12 +21,14 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 
 # Stage 2: Runtime image — minimal, hardened
-FROM python:3.11-slim AS runtime
+FROM python:3.11-alpine AS runtime
 
 # Security: create non-root user
 # HIPAA environments must not run services as root
-RUN groupadd --gid 10001 fhirapi && \
-    useradd --uid 10001 --gid fhirapi --no-create-home --shell /bin/false fhirapi
+# RUN groupadd --gid 10001 fhirapi && \
+    # useradd --uid 10001 --gid fhirapi --no-create-home --shell /bin/false fhirapi
+RUN addgroup -g 10001 fhirapi && \
+    adduser -u 10001 -G fhirapi -s /bin/false -D fhirapi
 
 WORKDIR /app
 
